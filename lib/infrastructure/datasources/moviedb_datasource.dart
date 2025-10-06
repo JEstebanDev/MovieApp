@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:movies_app/config/constants/environment.dart';
 import 'package:movies_app/domain/datasources/movies_datasource.dart';
 import 'package:movies_app/domain/entities/movie.dart';
-import 'package:movies_app/infrastructure/datasources/now.dart';
 import 'package:movies_app/infrastructure/mappers/movie_mapper.dart';
+import 'package:movies_app/infrastructure/models/moviedb/movie_details.dart';
 import 'package:movies_app/infrastructure/models/moviedb/moviedb_response.dart';
 
 class MovieDbDatasource extends MoviesDatasource {
@@ -16,8 +16,6 @@ class MovieDbDatasource extends MoviesDatasource {
 
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
-    // final response = mockJson;
-
     final response = await dio.get(
       '/movie/now_playing',
       queryParameters: {'page': page},
@@ -64,5 +62,16 @@ class MovieDbDatasource extends MoviesDatasource {
       // Handle error appropriately (log, rethrow, return empty list, etc.)
       rethrow;
     }
+  }
+
+  @override
+  Future<Movie> getMovieById(String idMovie) async {
+    final responseMovie = await dio.get('/movie/$idMovie');
+    if (responseMovie.statusCode != 200) {
+      throw Exception("Movie with id:$idMovie was not found");
+    }
+    return MovieMapper.movieDetailsToEntity(
+      MovieDetails.fromJson(responseMovie.data),
+    );
   }
 }

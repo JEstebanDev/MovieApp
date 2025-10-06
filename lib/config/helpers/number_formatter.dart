@@ -8,4 +8,9 @@ class NumberFormatter {
       locale: 'en',
     ).format(int.parse(number.toString().replaceAll('.', '')));
   }
+
+  static String formatDate(String date) {
+    final DateTime dt = DateTime.parse(date);
+    return DateFormat('MMM dd, yyyy').format(dt);
+  }
 }

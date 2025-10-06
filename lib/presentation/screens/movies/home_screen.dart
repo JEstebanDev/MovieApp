@@ -39,7 +39,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final initialLoading = ref.watch(initialLoadingProvider);
 
     if (initialLoading) {
-      return const FullScreenLoader();
+      return const ScreenLoader();
     }
 
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
